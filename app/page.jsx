@@ -1,14 +1,14 @@
 "use client";
 
 import Feed from "@components/Feed";
-
+import { Suspense } from "react";
 import { useSearchParams } from "next/navigation.js";
 
 const Home = () => {
   const searchParams = useSearchParams();
   const search = searchParams.get("search");
   return (
-    <section className="w-full flex-center flex-col">
+    <div className="w-full flex-center flex-col">
       <h1 className="head_text text-center">
         Discover & Share
         <br className="max-md:hidden" />
@@ -18,9 +18,8 @@ const Home = () => {
           share creative prompts
         </p>
       </h1>
-
       <Feed search={search} />
-    </section>
+    </div>
   );
 };
 

@@ -1,14 +1,21 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation.js";
+import { Suspense } from "react";
 
-import PromptCardList from "./PromptCardList.jsx";
+import dynamic from "next/dynamic";
+// ...
+
+const PromptCardList = dynamic(() => import("./PromptCardList.jsx"));
+
+import Loading from "./loading.js";
 
 const Feed = (params) => {
   const [searchText, setSearchText] = useState("");
   const [searchTimeOut, setSearchTimeOut] = useState(null);
   const [searchResults, setSearchResults] = useState([]);
   const [allPosts, setAllPosts] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const router = useRouter();
 
@@ -49,7 +56,7 @@ const Feed = (params) => {
   }, [allPosts]);
 
   useEffect(() => {
-    fetchAllPosts();
+    fetchAllPosts().then(() => setIsLoading(false));
   }, []);
 
   const handleTagClick = (tag) => {
@@ -59,7 +66,7 @@ const Feed = (params) => {
   };
 
   return (
-    <section className="feed">
+    <div className="feed">
       <form className="relative w-full flex-center">
         <input
           type="text"
@@ -73,12 +80,17 @@ const Feed = (params) => {
           className="search_input peer"
         />
       </form>
-      {searchText ? (
+      {/* <Suspense fallback={<Loading />}>
+         
+      </Suspense> */}
+      {isLoading ? (
+        <Loading />
+      ) : searchText ? (
         <PromptCardList data={searchResults} handleTagClick={handleTagClick} />
       ) : (
         <PromptCardList data={allPosts} handleTagClick={handleTagClick} />
       )}
-    </section>
+    </div>
   );
 };
 
