@@ -20,6 +20,9 @@ const Feed = (params) => {
   const router = useRouter();
 
   const fetchAllPosts = async () => {
+    setTimeout(() => {
+      console.log("World!");
+    }, 5000);
     const response = await fetch("/api/prompt");
     const data = await response.json();
     setAllPosts(data);
